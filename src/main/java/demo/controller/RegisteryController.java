@@ -18,8 +18,6 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/workers")
 public class RegisteryController {
-    private String hostname;
-    private Stream<Worker> workersInit;
     @Autowired
     private WorkerRepository workersRepo;
 
@@ -27,32 +25,28 @@ public class RegisteryController {
     @GetMapping()
     public ResponseEntity<Object> getUsers() {
         Stream<Worker> s = workersRepo.streamAllBy();
-        workersInit = s;
         return new ResponseEntity<>(s.toList(), HttpStatus.OK);
     }
 
     @PostMapping()
     public ResponseEntity<Worker> put(@RequestBody Worker worker) {
         Stream<Worker> s = workersRepo.streamAllBy();
+        workersRepo.save(worker);
         s.forEach(w ->{
             if (LocalDateTime.now().getSecond() - w.getCurrentTime().getSecond() > 12000) {
                 workersRepo.delete(w);
             }
         });
-        workersRepo.save(worker);
         return new ResponseEntity<>(worker, HttpStatus.OK);
     }
 
-    /*@Scheduled(fixedRate = 120000)
+    @Scheduled(fixedRate = 120000)
     public void getWorkers(){
         Stream<Worker> s = workersRepo.streamAllBy();
-        if (this.workersInit.toList().size() != s.toList().size()){
             RestClient restClient = RestClient.create();
             restClient.post()
-                    .uri("http://localhost:8080/hi")
+                    .uri("http://localhost:8080/hi2")
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(s.toList()).retrieve();
-        }
-       // return new ResponseEntity<>(null,HttpStatus.OK);
-    }*/
+    }
 }

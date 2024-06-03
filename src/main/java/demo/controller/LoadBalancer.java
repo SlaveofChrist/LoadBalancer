@@ -9,10 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestClient;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Controller
 public class LoadBalancer {
@@ -32,10 +36,16 @@ public class LoadBalancer {
         List<String> workersName = new ArrayList<>();
         this.workers.forEach(w -> workersName.add(w.getHostname()));
 
-        /*this.index = (this.index + 1) % this.workers.size();
+        this.index = (this.index + 1) % this.workers.size();
         String uri = "http://" + this.workers.get(this.index).getHostname() + ":8081/hello2";
-        String rw = restClient.get().uri(uri).retrieve().body(String.class);*/
+        String rw = restClient.get().uri(uri).retrieve().body(String.class);
 
         return new ResponseEntity<>(workersName, HttpStatus.OK);
+    }
+
+    @PostMapping("/hi2")
+    public ResponseEntity<Object> put(@RequestBody List<Worker> workers) {
+        this.workers = workers;
+        return new ResponseEntity<>(this.workers, HttpStatus.OK);
     }
 }

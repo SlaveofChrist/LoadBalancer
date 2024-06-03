@@ -1,0 +1,17 @@
+# IntelliJ IDEA files
+.idea/
+
+# Caches and logs
+*.iml
+*.ipr
+*.iws
+out/
+*.class
+*.log
+*.swp
+
+# Gradle
+.gradle/
+build/
+
+# Maven

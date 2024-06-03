@@ -29,7 +29,7 @@ public class WorkerController {
         }
     }
 
-    @Scheduled(fixedRate = 60000)
+    /*@Scheduled(fixedRate = 60000)
     public void ping(){
         this.hostname = System.getenv().get("HOSTNAME");
         if (this.hostname != null && this.hostname.contains("worker")){
@@ -40,7 +40,7 @@ public class WorkerController {
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(this.self).retrieve();
         }
-    }
+    }*/
     @GetMapping("/hello2")
     public ResponseEntity<String> hello(){
         return new ResponseEntity<>(hostname + " says hello!", HttpStatus.OK);
